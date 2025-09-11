@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useAuthContext from "../context/auth/authContext";
+import { useNavigate } from "react-router";
 
 export default function Login() {
   //get from context
@@ -7,6 +8,7 @@ export default function Login() {
   //form state
   const [form, setForm] = useState({ employeeID: "", password: "" });
 
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -22,7 +24,9 @@ export default function Login() {
     e.preventDefault();
     console.log(form);
     setError(null);
-    login(form, errorMessage);
+    login(form, errorMessage, () => {
+      navigate("/");
+    });
   };
   return (
     <div

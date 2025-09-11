@@ -8,7 +8,7 @@ const AuthContext = createContext();
 export default function AuthProvider({ children }) {
   const [user, setUser] = useAuth();
 
-  const login = (form, callback) => {
+  const login = (form, callback, success) => {
     if (!form.employeeID && !form.password) {
       //   alert("Field is required");
       callback("Field is required");
@@ -17,15 +17,17 @@ export default function AuthProvider({ children }) {
     //make a api to call get token
     if (form.employeeID === "test" && form.password === "test") {
       setUser({ user: "test" });
-      localStorage.setItem("token", { user: "test" });
+      localStorage.setItem("token", JSON.stringify({ user: "test" }));
+      success();
     } else {
       callback("invalid username,password");
     }
   };
 
-  const logout = () => {
+  const logout = (callback) => {
     setUser(null);
     localStorage.removeItem("token");
+    callback();
   };
 
   return (

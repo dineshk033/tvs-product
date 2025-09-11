@@ -7,6 +7,7 @@ export default function useAuth() {
   useEffect(() => {
     let token = localStorage.getItem("token");
     if (token) {
+      token = JSON.parse(token);
       setUser(token);
     } else {
       setUser(false);

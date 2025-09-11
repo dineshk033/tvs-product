@@ -1,12 +1,21 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
+import useAuthContext from "../../context/auth/authContext";
 
 const MENU = [
   { display: "Dashboard", url: "/" },
   { display: "Accounts", url: "/account" },
-  { display: "Login", url: "/login" },
+  { display: "Scrolls", url: "/scrolls" },
 ];
 export default function NavigationSideBar() {
+  const { user, logout } = useAuthContext();
+  const navigate = useNavigate();
+  const navigateFN = () => {
+    navigate("/login");
+  };
+  const handleLogout = () => {
+    logout(navigateFN);
+  };
   return (
     <div className="d-grid gap-2">
       {MENU.map((link) => (
@@ -26,6 +35,21 @@ export default function NavigationSideBar() {
         </NavLink>
         // </button>
       ))}
+      {!user ? (
+        <Link
+          className="text-dark text-decoration-none btn btn-light"
+          to="/login"
+        >
+          Login
+        </Link>
+      ) : (
+        <button
+          className="text-dark text-decoration-none btn btn-light"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      )}
       {/* <button type="button" class="btn btn-light">
         Accounts
       </button>
