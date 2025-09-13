@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import useAuthContext from "../context/auth/authContext";
 import { useNavigate } from "react-router";
+import { encryptString } from "../utils/passwordEncrypt";
+import FullscreenSpinner from "../components/spinner";
 
 export default function Login() {
   //get from context
-  const { login } = useAuthContext();
+  const { login, isLoading } = useAuthContext();
   //form state
   const [form, setForm] = useState({ employeeID: "", password: "" });
 
@@ -24,6 +26,7 @@ export default function Login() {
     e.preventDefault();
     console.log(form);
     setError(null);
+    console.log(encryptString(form.password));
     login(form, errorMessage, () => {
       navigate("/");
     });
@@ -33,6 +36,7 @@ export default function Login() {
       className="row justify-content-center align-items-center "
       style={{ height: "95vh" }}
     >
+      <FullscreenSpinner show={isLoading} />
       <div className="col-5">
         <div className="card p-4">
           <h4 className="fs-4 text-primary text-center">
