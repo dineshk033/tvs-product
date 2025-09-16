@@ -7,6 +7,7 @@ import Account from "../pages/account";
 import PrivateRoute from "../components/private-route";
 import ScrollsPage from "../pages/scrolls";
 import ScrollDetails from "../pages/scroll-details";
+import ScrollAdd from "../pages/scroll-add";
 
 export default function CustomRoutes() {
   return (
@@ -26,6 +27,14 @@ export default function CustomRoutes() {
           element={
             <PrivateRoute>
               <ScrollsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="scrolls/add"
+          element={
+            <PrivateRoute>
+              <ScrollAdd />
             </PrivateRoute>
           }
         />
