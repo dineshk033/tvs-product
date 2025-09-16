@@ -1,9 +1,23 @@
 import React, { useEffect, useState } from "react";
 import FilterTable from "../../components/filter-table";
 import { AxiosInstance } from "../../api/AxiosInstance";
+import GridTable from "../../components/grid-table";
+import BadgeStatus from "../../components/badge-status";
+import { Link } from "react-router";
+
+const SCROLLCOLUMNS = [
+  { display: "Scroll", key: "id" },
+  { display: "Deposit Date", key: "deposit_date" },
+  { display: "No. of Receipts", key: "no_of_receipts" },
+  { display: "Amount", key: "scroll_amount" },
+  { display: "Employee ID", key: "employee_id" },
+  { display: "Approval Status", key: "status_options" },
+  { display: "Bank Name", key: { bank: "name" } },
+];
 
 export default function ScrollTable() {
   const [options, setOptions] = useState({ option1: [], option2: [] });
+  const [originalData, setOriginalData] = useState([]);
   const [filters, setFilters] = useState({
     label1: "",
     label2: "",
@@ -25,13 +39,39 @@ export default function ScrollTable() {
       setOptions({ option1: [], option2: [] });
     }
   };
+
+  const fetchGridData = async () => {
+    const response = await AxiosInstance.get("/scrollData");
+    console.log(response.data);
+    setOriginalData(response.data);
+  };
   useEffect(() => {
     fetchOptions();
+    fetchGridData();
   }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+  const templateDate = (item) => {
+    const date = new Date(item.deposit_date);
+    return <td>{date.toLocaleDateString()}</td>;
+  };
+  const templateStatus = (item) => {
+    return <BadgeStatus status={item.status_options} />;
+  };
+  const templateID = (item) => {
+    return (
+      <td>
+        <Link
+          className="text-primary text-decoration-none"
+          to={`/scrolls/${item.id}`}
+        >
+          {item.id}
+        </Link>
+      </td>
+    );
   };
   return (
     <>
@@ -41,6 +81,15 @@ export default function ScrollTable() {
         option2={options.option2}
         filters={filters}
         handleChange={handleChange}
+      />
+      <GridTable
+        columnConfig={SCROLLCOLUMNS}
+        dataSource={originalData}
+        template={{
+          deposit_date: templateDate,
+          status_options: templateStatus,
+          id: templateID,
+        }}
       />
     </>
   );

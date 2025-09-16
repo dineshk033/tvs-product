@@ -1,0 +1,21 @@
+.card-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.divider {
+  border-top: 1px solid #dee2e6;
+  margin: 0.5rem 0;
+}
+.info-label {
+  font-weight: 600;
+  color: #495057;
+}
+.info-value {
+  color: #212529;
+}
+.preview-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+}
