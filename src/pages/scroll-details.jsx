@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { getById } from "../redux/scrollSlice";
 
 export default function ScrollDetails() {
+  const data = useSelector((state) => state.scrolls?.filterData);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getById(id));
+  }, [id]);
+  if (data.length === 0) {
+    return <div className="alert alert-danger">NO Records found!</div>;
+  }
+  const scrolls = data[0];
   return (
     <div class="container py-4">
       <h2 class="mb-4 ">Scroll Details View</h2>
@@ -11,18 +24,18 @@ export default function ScrollDetails() {
           {/* <!-- Employee Card --> */}
           <div class="card mb-4 shadow-sm">
             <div class="card-body card-custom">
-              <h5 class="card-title">Mahesh M</h5>
-              <h6 class="card-subtitle text-muted">Hubli</h6>
+              <h5 class="card-title">{scrolls.agent_name}</h5>
+              <h6 class="card-subtitle text-muted">{scrolls.agent_branch}</h6>
               <div class="divider"></div>
               <div class="d-flex align-items-center">
-                <i class="bi bi-person-badge me-2"></i>{" "}
+                <i class="bi bi-person-badge me-2"></i>
                 <span>
-                  Employee ID: <strong>1212</strong>
+                  Employee ID: <strong>{scrolls.employee_id}</strong>
                 </span>
               </div>
               <div class="d-flex align-items-center">
                 <i class="bi bi-telephone me-2"></i>{" "}
-                <span>+91 89348 38948</span>
+                <span>{scrolls.agent_phone_number}</span>
               </div>
             </div>
           </div>
@@ -44,12 +57,12 @@ export default function ScrollDetails() {
             <div class="col-md-3">
               <span class="info-label">Scroll Number:</span>
               <br />
-              <span class="info-value">1001</span>
+              <span class="info-value">{scrolls.id}</span>
             </div>
             <div class="col-md-3">
               <span class="info-label">No. of Receipts:</span>
               <br />
-              <span class="info-value">5</span>
+              <span class="info-value">{scrolls.no_of_receipts}</span>
             </div>
             <div class="col-md-3">
               <span class="info-label">Date:</span>

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import useAuthContext from "../context/auth/authContext";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { encryptString } from "../utils/passwordEncrypt";
 import FullscreenSpinner from "../components/spinner";
 
 export default function Login() {
+  const location = useLocation();
   //get from context
   const { login, isLoading } = useAuthContext();
   //form state
@@ -28,7 +29,8 @@ export default function Login() {
     setError(null);
     console.log(encryptString(form.password));
     login(form, errorMessage, () => {
-      navigate("/");
+      const redirectUrl = location.state?.redirectURL || "/";
+      navigate(redirectUrl);
     });
   };
   return (

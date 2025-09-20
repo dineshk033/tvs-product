@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FilterTable from "../../components/filter-table";
 import { AxiosInstance } from "../../api/AxiosInstance";
 import GridTable from "../../components/grid-table";
 import BadgeStatus from "../../components/badge-status";
 import { Link } from "react-router";
+import { useDispatch } from "react-redux";
+import { fetchData } from "../../redux/scrollSlice";
 
 const SCROLLCOLUMNS = [
   { display: "Scroll", key: "id" },
@@ -18,6 +20,7 @@ const SCROLLCOLUMNS = [
 export default function ScrollTable() {
   const [options, setOptions] = useState({ option1: [], option2: [] });
   const [originalData, setOriginalData] = useState([]);
+  const dispatch = useDispatch();
   const [filters, setFilters] = useState({
     label1: "",
     label2: "",
@@ -42,7 +45,7 @@ export default function ScrollTable() {
 
   const fetchGridData = async () => {
     const response = await AxiosInstance.get("/scrollData");
-    console.log(response.data);
+    dispatch(fetchData(response.data));
     setOriginalData(response.data);
   };
   useEffect(() => {
