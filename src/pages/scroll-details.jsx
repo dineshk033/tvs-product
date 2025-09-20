@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getById } from "../redux/scrollSlice";
+import { fetchScrollsData } from "../redux/custom-async";
 
 export default function ScrollDetails() {
   const data = useSelector((state) => state.scrolls?.filterData);
   const { id } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getById(id));
+    dispatch(fetchScrollsData());
   }, [id]);
   if (data.length === 0) {
     return <div className="alert alert-danger">NO Records found!</div>;

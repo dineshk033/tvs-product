@@ -5,7 +5,7 @@ import GridTable from "../../components/grid-table";
 import BadgeStatus from "../../components/badge-status";
 import { Link } from "react-router";
 import { useDispatch } from "react-redux";
-import { fetchData } from "../../redux/scrollSlice";
+import { fetchData, toggleSpinner } from "../../redux/scrollSlice";
 
 const SCROLLCOLUMNS = [
   { display: "Scroll", key: "id" },
@@ -44,9 +44,11 @@ export default function ScrollTable() {
   };
 
   const fetchGridData = async () => {
+    dispatch(toggleSpinner());
     const response = await AxiosInstance.get("/scrollData");
     dispatch(fetchData(response.data));
     setOriginalData(response.data);
+    dispatch(toggleSpinner());
   };
   useEffect(() => {
     fetchOptions();

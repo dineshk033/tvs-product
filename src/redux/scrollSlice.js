@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchScrollsData } from "./custom-async";
 
 const initialState = {
   originalData: [],
   filterData: [],
+  loading: false,
+  error: "",
 };
 
 const scrollSlice = createSlice({
@@ -20,8 +23,27 @@ const scrollSlice = createSlice({
       state.originalData = action.payload;
       return state;
     },
+    toggleSpinner: (state) => {
+      state.loading = !state.loading;
+      return state;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchScrollsData.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.filterData = [];
+    });
+    builder.addCase(fetchScrollsData.fulfilled, (state, action) => {
+      state.loading = false;
+      state.filterData = action.payload;
+    });
+    builder.addCase(fetchScrollsData.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { getById, fetchData } = scrollSlice.actions;
+export const { getById, fetchData, toggleSpinner } = scrollSlice.actions;
 export default scrollSlice.reducer;
